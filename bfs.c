@@ -1,4 +1,5 @@
-//program for graph traversal using bfs
+// Program for Graph Traversal using BFS (0-based indexing)
+
 #include <stdio.h>
 
 int a[20][20], q[20], visited[20];
@@ -6,14 +7,14 @@ int n, i, j, f = 0, r = -1;
 
 void input()
 {
-    printf("\nEnter the number of vertices: ");
+    printf("Enter number of vertices: ");
     scanf("%d", &n);
 
-    printf("\nEnter graph data in matrix form:\n");
+    printf("Enter adjacency matrix:\n");
 
-    for(i = 1; i <= n; i++)
+    for(i = 0; i < n; i++)
     {
-        for(j = 1; j <= n; j++)
+        for(j = 0; j < n; j++)
         {
             scanf("%d", &a[i][j]);
         }
@@ -24,9 +25,9 @@ void display()
 {
     printf("\nAdjacency Matrix:\n");
 
-    for(i = 1; i <= n; i++)
+    for(i = 0; i < n; i++)
     {
-        for(j = 1; j <= n; j++)
+        for(j = 0; j < n; j++)
         {
             printf("%d ", a[i][j]);
         }
@@ -34,22 +35,32 @@ void display()
     }
 }
 
+// BFS function
 void bfs(int v)
 {
+    // Mark starting vertex as visited
     visited[v] = 1;
+    // Insert into queue
     q[++r] = v;
 
+    // Run until queue becomes empty
     while(f <= r)
     {
+        // Remove from queue
         int current = q[f++];
 
-        printf("%d\t", current);
+        // Print current node
+        printf("%d ", current);
 
-        for(i = 1; i <= n; i++)
+        // Check all adjacent vertices
+        for(i = 0; i < n; i++)
         {
+            // If connected and not visited
             if(a[current][i] == 1 && visited[i] == 0)
             {
                 visited[i] = 1;
+
+                // Add into queue
                 q[++r] = i;
             }
         }
@@ -60,26 +71,28 @@ int main()
 {
     int v, connected = 1;
 
-    printf("BFS\n");
+    printf("BFS Traversal\n");
 
     input();
+
     display();
 
-    // initialize visited array
-    for(i = 1; i <= n; i++)
+    // Initialize visited array
+    for(i = 0; i < n; i++)
     {
         visited[i] = 0;
     }
 
-    printf("\nEnter the starting vertex: ");
+    // Starting vertex
+    printf("\nEnter starting vertex (0 to %d): ", n - 1);
     scanf("%d", &v);
 
-    printf("\nThe nodes which are reachable are:\n");
+    printf("\nBFS Traversal is:\n");
 
     bfs(v);
 
-    // check connectivity
-    for(i = 1; i <= n; i++)
+    // Check connectivity
+    for(i = 0; i < n; i++)
     {
         if(visited[i] == 0)
         {
@@ -90,11 +103,11 @@ int main()
 
     if(connected)
     {
-        printf("\nBFS is possible\n");
+        printf("\n\nGraph is Connected\n");
     }
     else
     {
-        printf("\nBFS is not possible\n");
+        printf("\n\nGraph is Not Connected\n");
     }
 
     return 0;
