@@ -1,86 +1,113 @@
-// Quick Sort Program in C
+// Program for All-Pairs Shortest Path using Floyd's Algorithm
+
 #include <stdio.h>
-int n;
-// Function declarations
-void inputArray(int a[]);
-void displayArray(int a[]);
-void quickSort(int a[], int left, int right);
+#define INF 999
 
-int main()
-{
-    int a[100];
-    printf("QUICK SORT\n");
-    inputArray(a);
-    printf("\nArray Before Sorting:\n");
-    displayArray(a);
-    quickSort(a, 0, n - 1);
-    printf("\nArray After Sorting:\n");
-    displayArray(a);
+int p[10][10], n;
 
-    return 0;
+int min(int a, int b) {
+    return (a < b) ? a : b;
 }
+
 // Function for input
-void inputArray(int a[])
-{
-    int i;
-    printf("Enter size of array: ");
+void input() {
+    int e, u, v, w, i, j;
+
+    printf("Enter number of vertices: ");
     scanf("%d", &n);
 
-    for(i = 0; i < n; i++)
-    {
-        printf("Enter element %d: ", i + 1);
-        scanf("%d", &a[i]);
+    printf("Enter number of edges: ");
+    scanf("%d", &e);
+
+    // Initialize matrix
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+
+            if(i == j)
+                p[i][j] = 0;
+            else
+                p[i][j] = INF;
+        }
+    }
+
+    // Input edges
+    for(i = 1; i <= e; i++) {
+
+        printf("Enter edge (u v weight): ");
+        scanf("%d %d %d", &u, &v, &w);
+
+        p[u][v] = w;
     }
 }
-// Function for display
-void displayArray(int a[])
-{
-    int i;
-    for(i = 0; i < n; i++)
-    {
-        printf("%5d", a[i]);
-    }
-    printf("\n");
-}
 
-// Quick Sort Function
-void quickSort(int a[], int left, int right)
-{
-    int i, j, pivot, temp;
-    if(left < right)
-    {
-        pivot = a[left];
-        i = left + 1;
-        j = right;
+// Function to display matrix
+void display() {
+    int i, j;
 
-        while(i <= j)
-        {
-            // Find element greater than pivot
-            while(i <= right && a[i] <= pivot)
-            {
-                i++;
-            }
-            // Find element smaller than pivot
-            while(a[j] > pivot)
-            {
-                j--;
-            }
-            // Swap if needed
-            if(i < j)
-            {
-                temp = a[i];
-                a[i] = a[j];
-                a[j] = temp;
-            }
+    for(i = 1; i <= n; i++) {
+
+        for(j = 1; j <= n; j++) {
+
+            if(p[i][j] == INF)
+                printf("999\t");
+            else
+                printf("%d\t", p[i][j]);
         }
 
-        // Place pivot in correct position
-        temp = a[left];
-        a[left] = a[j];
-        a[j] = temp;
-
-        // Recursive calls
-        quickSort(a, left, j - 1);
-        quickSort(a, j + 1, right);
+        printf("\n");
     }
+}
+
+// Function to calculate shortest paths
+void floyds() {
+    int i, j, k;
+
+    for(k = 1; k <= n; k++) {
+
+        for(i = 1; i <= n; i++) {
+
+            for(j = 1; j <= n; j++) {
+
+                p[i][j] = min(p[i][j],
+                              p[i][k] + p[k][j]);
+            }
+        }
+    }
+}
+
+void main() {
+
+    int i, j;
+
+    printf("All-Pairs Shortest Path using Floyd's Algorithm\n");
+
+    input();
+
+    printf("\nInput Matrix:\n");
+    display();
+
+    floyds();
+
+    printf("\nShortest Path Matrix:\n");
+    display();
+
+    printf("\nShortest Paths:\n");
+
+    for(i = 1; i <= n; i++) {
+
+        for(j = 1; j <= n; j++) {
+
+            if(i != j) {
+
+                printf("\n<%d,%d> = ", i, j);
+
+                if(p[i][j] == INF)
+                    printf("No Path");
+                else
+                    printf("%d", p[i][j]);
+            }
+        }
+    }
+
+    
 }
